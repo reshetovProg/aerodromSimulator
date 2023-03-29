@@ -1,0 +1,7 @@
+﻿  file.cpp
+  generator.cpp
+C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\generator.cpp(17,53): warning C4305: аргумент: усечение из "double" в "float"
+  main.cpp
+C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\main.cpp(22,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Создание кода...
+  ConsoleApplication19.vcxproj -> C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\x64\Debug\ConsoleApplication19.exe
