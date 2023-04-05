@@ -3,7 +3,8 @@
 
 #define show
 
-//#define test
+#define test
+//#define testSplit
 
 string* split(string str, char s) {
     int count = 1;
@@ -29,10 +30,11 @@ struct Aeroplane {
     string id;
     string type;
 
+    //инициализация объекта из строки данных
     void startInit(string str) {
         string* array = split(str, ';');
-        id = stoi(array[0]);
-        type = stoi(array[1]);
+        id = array[0];
+        type = array[1];
     }
 
     string info() {
@@ -51,6 +53,10 @@ struct Aerodrom {
 
     int* placeBuffer = nullptr;
 
+    string info() {
+        return "angarCount: " + to_string(angarCount) + ", placeCount: " +to_string(placeCount);
+    }
+
     //начальная инициализация массивов
     void startInit() {
         place = new Aeroplane*[placeCount]{nullptr};
@@ -63,7 +69,7 @@ struct Aerodrom {
     }
 
     
-
+    //инициализация объекта из строки данных
     void startInit(string str) {
 
         string* array = split(str,';');
@@ -218,12 +224,15 @@ struct Aerodrom {
         Aeroplane* aeroplane = nullptr;
         int i = 0;
         for (; i < placeCount; i++) {
-            if (place[i]->id == id) {
-                aeroplane = place[i];
-                place[i] = nullptr;
-                removeFromBuffer(i);
-                break;
+            if (place[i] != nullptr) {
+                if (place[i]->id == id) {
+                    aeroplane = place[i];
+                    place[i] = nullptr;
+                    removeFromBuffer(i);
+                    break;
+                }
             }
+            
         }
 #ifdef show
         if (aeroplane == nullptr) {
@@ -270,7 +279,7 @@ struct Aerodrom {
     //прилет самолета
     bool income(Aeroplane*& aeroplane) {
 #ifdef show
-        cout << aeroplane->info() << "просит посадки" << endl;
+        std::cout << aeroplane->info() << "просит посадки" << endl;
 #endif
         if (aeroplane->type == "light") {
             return addToPlace(aeroplane);
@@ -297,29 +306,146 @@ struct Aerodrom {
 #endif
         return aeroplane;
     }
+
+    void visual() {
+        std::cout << "angar" << endl;
+        for (int i = 0; i < angarCount; i++) {
+            string str1 = (angar[i][0] == nullptr) ? "--" : angar[i][0]->info();
+            string str2 = (angar[i][1] == nullptr) ? "--" : angar[i][1]->info();
+            std::cout << "|" << str1 << "|" << str2 << "|";
+        }
+        cout << endl;
+        std::cout << "place" << endl;
+        for (int i = 0; i < placeCount; i++) {
+            string str1 = (place[i] == nullptr) ? "--" : place[i]->info();
+            std::cout << "|" << str1;
+        }
+        std::cout << endl;
+
+    }
+
+
 };
+
+
+void replace(Aeroplane** &array1, Aeroplane** &array2, int index) {
+
+    
+    int size2;
+    if (array2 == nullptr) 
+        size2 = 0;
+    else
+        size2 = _msize(array2) / sizeof(array2);
+
+    int size1 = _msize(array1) / sizeof(array1);
+    cout << "replace" << size1 << ":" << size2 << endl;
+    Aeroplane** buf1 = new Aeroplane*[size1 - 1];
+    Aeroplane** buf2 = new Aeroplane*[size2 + 1];
+
+    for (int i = 0; i < index; i++) {
+        buf1[i] = array1[i];
+    }
+    for (int i = index+1; i < size1; i++) {
+        buf1[i-1] = array1[i];
+    }
+    for (int i = 0; i < size2; i++) {
+        buf2[i] = array2[i];
+    }
+    buf2[size2] = array1[index];
+    delete[] array1;
+    delete[] array2;
+    if (size1 == 1) buf1 = nullptr;
+    array1 = buf1;
+    array2 = buf2;
+}
 
 
 int main()
 {
     srand(time(NULL));
-   // generateAeroplaneFile(PATH_AEROPLANE_FILE, COUNT_AEROPLANE);
-   // generateAerodromFile(PATH_AERODROM_FILE, COUNT_AERODROM);
+    setlocale(LC_ALL, "");
+    generateAeroplaneFile(PATH_AEROPLANE_FILE, COUNT_AEROPLANE);
+    generateAerodromFile(PATH_AERODROM_FILE, COUNT_AERODROM);
 
     //вывод файлов
+
+#ifdef testSplit
+    string* strArrayAeroplane = readFile(PATH_AEROPLANE_FILE);
+    Aeroplane* aero = new Aeroplane;
+    aero->startInit(strArrayAeroplane[0]);
+    cout<<aero->info();
+#endif
 #ifdef test
-    string* arrayAeroplane = readFile(PATH_AEROPLANE_FILE);
-    string* arrayAerodrom = readFile(PATH_AERODROM_FILE);
 
-    cout << "aeroplanes" << endl;
-    for (int i = 0; i < COUNT_AEROPLANE; i++) {
-        cout << arrayAeroplane[i] << endl;
-    }
+    for (int i = 0; i < 10; i++) {
+        string* strArrayAeroplane = readFile(PATH_AEROPLANE_FILE);
+        string* strArrayAerodrom = readFile(PATH_AERODROM_FILE);
 
-    cout << "aerodroms" << endl;
-    for (int i = 0; i < COUNT_AERODROM; i++) {
-        cout << arrayAerodrom[i] << endl;
+        //cout << "aeroplanes" << endl;
+        //for (int i = 0; i < COUNT_AEROPLANE; i++) {
+        //    cout << strArrayAeroplane[i] << endl;
+        //}
+
+        //cout << "aerodroms" << endl;
+        //for (int i = 0; i < COUNT_AERODROM; i++) {
+        //    cout << strArrayAerodrom[i] << endl;
+        //}
+
+        //создание массива объектов
+        Aeroplane** arrayAeroplane = new Aeroplane * [COUNT_AEROPLANE];
+        for (int i = 0; i < COUNT_AEROPLANE; i++) {
+            arrayAeroplane[i] = new Aeroplane;
+            arrayAeroplane[i]->startInit(strArrayAeroplane[i]);
+            std::cout << arrayAeroplane[i]->info() << endl;
+        }
+
+        //создание аэропорта
+        Aerodrom aerodrom;
+        aerodrom.startInit(strArrayAerodrom[random(0, COUNT_AERODROM - 1)]);
+        std::cout << aerodrom.info();
+        cout << endl;
+        //массив самолетов в аэропорту
+        Aeroplane** inAeroport = nullptr;
+
+        //симуляция перелетов
+        for (int i = 0, size; i < 10; i++) {
+            //выбор прилетел и отлет с вероятностью 7/1
+            //true - in / false - out
+            bool in_out = (random(0, 7) == 0) ? false : true;
+            cout << endl << in_out << endl;
+            if (in_out) {
+                size = _msize(arrayAeroplane) / sizeof(arrayAeroplane[0]);
+                int index = random(0, size - 1);
+                if (aerodrom.income(arrayAeroplane[index])) {
+                    cout << endl << "income" << arrayAeroplane[index]->info() << endl;
+                    replace(arrayAeroplane, inAeroport, index);
+                    aerodrom.visual();
+                }
+
+            }
+            else {
+                if (inAeroport != nullptr) {
+                    size = _msize(inAeroport) / sizeof(inAeroport[0]);
+                    int index = random(0, size-1);
+                    cout << endl;
+                    for (int i = 0; i < size; i++) {
+                        cout << inAeroport[i]->info() << endl;
+                    }
+                    cout << endl << "index" << index << endl;
+                    if (size != 1) {
+                        aerodrom.outcome(inAeroport[index]->id);
+                        cout << endl << "outcome" << inAeroport[index]->info() << endl;
+                        replace(inAeroport, arrayAeroplane, index);
+                        aerodrom.visual();
+                    }
+                    else cout << "else" << endl;
+                }
+                
+            }
+
+        }
     }
+    
 
 #endif
 

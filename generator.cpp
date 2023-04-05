@@ -14,7 +14,7 @@ string createAeroplane(string type1, string type2, float k, int count) {
 void generateAeroplaneFile(string path, int count) {
 	ofstream out(path);
 	for (int i = 0; i < count; i++) {
-		out << createAeroplane("boieng","light",0.2, i+100) << endl;
+		out << createAeroplane("boeing","light",0.2, i+100) << endl;
 	}
 	out.close();
 	cout << "generate " << path << " completed"<<endl;

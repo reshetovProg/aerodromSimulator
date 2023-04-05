@@ -1,3 +1,8 @@
 ﻿  main.cpp
-C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\main.cpp(272,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\main.cpp(338,48): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\main.cpp(340,48): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\main.cpp(365,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\main.cpp(417,74): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\main.cpp(428,70): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\main.cpp(290): warning C4715: Aerodrom::income: значение возвращается не при всех путях выполнения
   ConsoleApplication19.vcxproj -> C:\Users\Admin\Documents\SS2Resh\ConsoleApplication19\x64\Debug\ConsoleApplication19.exe
